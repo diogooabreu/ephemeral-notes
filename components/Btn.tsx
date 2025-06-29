@@ -22,7 +22,7 @@ export default function Btn({
 
 const styles = StyleSheet.create({
     btn: {
-        backgroundColor: "#191970",
+        backgroundColor: "#2f324a",
         borderRadius: 15,
         height: 50,
         width: "100%",

@@ -20,7 +20,7 @@ export function NoteCard({ note, onPress }: NoteCardProps) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#F0F8FF",
+    backgroundColor: "#F8F8FF",
     borderRadius: 8,
     padding: 12,
     marginBottom: 12,
