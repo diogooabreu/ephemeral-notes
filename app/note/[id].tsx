@@ -1,27 +1,40 @@
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { notes } from "../../database/notes";
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import React, { useState, useCallback} from "react";
 import ScreenContainer from "@/components/ScreenContainer";
 import Btn from "@/components/Btn";
-
+import { getNotes, deleteNote } from "@/utils/storage";
+import { Note } from "@/types/Note";
 
 export default function NoteDetail() {
   const { id } = useLocalSearchParams();
-  const note = notes.find((n) => n.id === id);
   const router = useRouter();
+  const [note, setNote] = useState<Note | null>(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      const loadNote = async () => {
+        const allNotes = await getNotes();
+        const found = allNotes.find((n) => n.id === id);
+        setNote(found || null);
+      };
+      loadNote();
+    }, [id])
+  );
+    
+  const handleDelete = async () => {
+    await deleteNote(id as string);
+    router.replace('/(tabs)/myNotes');
+  };
 
   if (!note) {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.notFound}>Nota não encontrada.</Text>
-    </View>
-  );
+    return (
+      <View style={styles.container}>
+        <Text style={styles.notFound}>Nota não encontrada.</Text>
+      </View>
+    );
   }
-    
-  const handleDelete = () => {
-    router.push("/");
-  };
 
   return (
     <ScreenContainer>
@@ -36,7 +49,7 @@ export default function NoteDetail() {
       </View>
           <Btn
               title="deletar"
-              onPress={() => router.back()}
+              onPress={handleDelete}
           />
     </ScreenContainer>
   );

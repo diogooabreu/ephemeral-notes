@@ -16,6 +16,6 @@ export async function saveNote(newNote: Note): Promise<void> {
 
 export async function deleteNote(noteId: string): Promise<void>{
     const notes = await getNotes();
-    const updated = notes.filter(note => note.id !== note.id);
-    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    const updated = notes.filter(note => note.id !== noteId);
+    await AsyncStorage.setItem('notes', JSON.stringify(updated));
 }
