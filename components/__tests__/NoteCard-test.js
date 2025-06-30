@@ -1,9 +1,9 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import { NoteCard } from '../NoteCard'; // Ou ajuste o caminho relativo
+import { NoteCard } from '../NoteCard';
 
 describe('NoteCard', () => {
-  //Define um objeto de nota mock para ser usado nos testes
+  
   const mockNote = {
     id: '1',
     title: 'Título da Minha Nota',
@@ -48,3 +48,4 @@ describe('NoteCard', () => {
     expect(mockOnPress).not.toHaveBeenCalled();
   });
 });
+

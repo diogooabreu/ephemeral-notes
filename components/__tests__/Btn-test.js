@@ -1,4 +1,3 @@
-// Btn.test.js
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import Btn from '../Btn'; 
@@ -12,7 +11,7 @@ describe('Btn', () => {
   });
 
   it('should call the onPress function when pressed', () => {
-    const mockOnPress = jest.fn(); // Cria uma função mock para simular o onPress
+    const mockOnPress = jest.fn(); 
     const { getByText } = render(<Btn title="Pressionar" onPress={mockOnPress} />);
 
     fireEvent.press(getByText('Pressionar'));
