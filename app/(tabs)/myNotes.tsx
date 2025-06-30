@@ -1,19 +1,32 @@
-import { View, Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
-import React from 'react';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState, useCallback } from 'react';
 import ScreenContainer from '@/components/ScreenContainer';
 import { NoteCard } from '@/components/NoteCard';
-import { useRouter } from 'expo-router';
-import { notes } from '@/database/notes';
+import { useRouter, useFocusEffect } from 'expo-router';
+import { getNotes } from '@/utils/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { Note } from '@/types/Note';
 
 export default function myNotes() {
   const router = useRouter();
+  const [note, setNote] = useState<Note[]>([]);
 
-    const handleLogout = async () => {
-      await AsyncStorage.removeItem('user');
-      router.replace('/');
-    };
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('user');
+    router.replace('/');
+  };
+
+  const loadNotes = async () => {
+    const savedNotes = await getNotes();
+    setNote(savedNotes);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      loadNotes();
+    },[])
+  );
   
 
   return (
@@ -26,7 +39,7 @@ export default function myNotes() {
       </View>
 
       <FlatList
-        data={notes}
+        data={note}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <NoteCard
@@ -34,6 +47,11 @@ export default function myNotes() {
             onPress={() => router.push(`/note/${item.id}`)}
           />
         )}
+        ListEmptyComponent={
+          <Text style={{ color: "#ccc", textAlign: "center", marginTop: 40 }}>
+            Nenhuma nota salva ainda.
+          </Text>
+        }
       />
     </ScreenContainer>
   );

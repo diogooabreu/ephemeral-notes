@@ -4,6 +4,7 @@ import { useRouter, useFocusEffect } from "expo-router";
 import Btn from "@/components/Btn";
 import { notes } from "@/database/notes";
 import ScreenContainer from "@/components/ScreenContainer";
+import { saveNote } from "@/utils/storage";
 
 export default function NewNote() {
   const router = useRouter();
@@ -17,14 +18,16 @@ export default function NewNote() {
     }, [])
   );
 
-  const handleSave = () => {
-    notes.push({
-      id: Math.random().toString(),
+  const handleSave = async () => {
+    if (!title.trim() || !content.trim()) return;
+    
+    await saveNote({
+      id: Date.now().toString(),
       title,
       content,
     });
 
-    router.push("/");
+    router.push('/');
   };
 
   return (
