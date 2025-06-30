@@ -8,11 +8,14 @@ export async function getNotes(): Promise<Note[]>{
     return json ? JSON.parse(json) : [];
 }
 
-export async function saveNote(newNote: Note): Promise<void> {
+export async function saveNote(newNote: Omit<Note, 'user'>): Promise<void> {
+    const user = await AsyncStorage.getItem('user');
+    if (!user) throw new Error('Usuário não autenticado');
+  
     const notes = await getNotes();
-    notes.push(newNote);
+    notes.push({ ...newNote, user });
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
-}
+  }
 
 export async function deleteNote(noteId: string): Promise<void>{
     const notes = await getNotes();

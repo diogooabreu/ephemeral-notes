@@ -24,8 +24,16 @@ export default function myNotes() {
 
   useFocusEffect(
     useCallback(() => {
+      const loadNotes = async () => {
+        const allNotes = await getNotes();
+        const user = await AsyncStorage.getItem('user');
+        if (!user) return;
+  
+        const filtered = allNotes.filter(note => note.user === user);
+        setNote(filtered);
+      };
       loadNotes();
-    },[])
+    }, [])
   );
   
 
