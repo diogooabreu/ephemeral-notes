@@ -1,10 +1,22 @@
-import * as React from 'react';
-import renderer from 'react-test-renderer';
+// Btn.test.js
+import React from 'react';
+import { render, fireEvent } from '@testing-library/react-native';
+import Btn from '../Btn'; 
 
-import { MonoText } from '../StyledText';
+describe('Btn', () => {
+  it('should render correctly with the given title', () => {
+    const mockOnPress = jest.fn();
+    const { getByText } = render(<Btn title="Clique Aqui" onPress={mockOnPress} />);
 
-it(`renders correctly`, () => {
-  const tree = renderer.create(<MonoText>Snapshot test!</MonoText>).toJSON();
+    expect(getByText('Clique Aqui')).toBeTruthy();
+  });
 
-  expect(tree).toMatchSnapshot();
+  it('should call the onPress function when pressed', () => {
+    const mockOnPress = jest.fn(); // Cria uma função mock para simular o onPress
+    const { getByText } = render(<Btn title="Pressionar" onPress={mockOnPress} />);
+
+    fireEvent.press(getByText('Pressionar'));
+
+    expect(mockOnPress).toHaveBeenCalledTimes(1);
+  });
 });
